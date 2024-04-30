@@ -14,12 +14,14 @@ e : Alev topu fırlatır ve skorumuza -20p etki eder <br>
 d : Hitboxları açar ve daha kolay bir oyun deneyimi sağlar  <br> 
 
 # Oyunun linki 
-sad
+http://oskarandmia.erenozer.com.tr
 <br> 
 # Oyunun Videosu
 https://youtu.be/BevtXefWAYY <br>
 
 # Oyundan Görüntüler
+![Screenshot_30](https://github.com/Eren0zer/Web-Tabanli-Programlama-Oyun-Projesi/assets/146471616/8bcd4bd4-5006-4e74-9668-13acdd3e2b0f)
+![Screenshot_27](https://github.com/Eren0zer/Web-Tabanli-Programlama-Oyun-Projesi/assets/146471616/eb1e643c-89cb-4a08-b904-94f4e23dd61c)
 
 # Yararlandığım Kaynaklar 
 görseller için <br>
