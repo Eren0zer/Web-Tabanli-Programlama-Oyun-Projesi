@@ -6,7 +6,7 @@
 ← : Sağ sol hareket <br>
 ↓ : Durma <br>
 1 2 3 : yakın dövüş  <br>
-q : Köpeğe ek can alır ve skorumuza -250p etki eder <br>
+q : Köpeğe ek can alır ve skorumuza -200p etki eder <br>
 w : Kara delik fırlatır ve skorumuza -20p etki eder <br>
 e : Alev topu fırlatır ve skorumuza -20p etki eder <br>
 d : Hitboxları açar ve daha kolay bir oyun deneyimi sağlar  <br> <br>
