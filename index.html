@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+    <style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#canvas1 {
+    border: 2px solid deeppink;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    max-width: 100%;
+    max-height: 100%;
+    font-family: "Pixelify Sans", sans-serif;
+    
+}
+
+#player{
+    display: none;
+}
+#kopek{
+    display: none;
+}
+#kopekcan{
+    display: none;
+}
+#layer5{  
+    display: none;
+}
+
+#enemy_climb, #enemy_ground, #enemy_fly, #enemy_ground2{
+    display: none;
+}
+#saldiri, #saldiri2{
+    display: none;
+}
+#enemy_fly2{
+    display: none;
+}
+
+#eklentican{
+    display: none;
+}
+#can{
+    display: none;
+}
+body {
+    background-color: black;
+    color: white; /* Metin rengini beyaz olarak ayarladık, zemin rengi ile uyumlu olması için */
+  }
+
+  #infoContainer {
+    position: relative;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.info-button {
+    font-family: 'Pixelify Sans', sans-serif;
+    position: absolute;
+    font-size: 20px;
+    top: 0;
+    left: 0;
+    background-color: deeppink;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+.button {
+    font-family: 'Pixelify Sans', sans-serif;
+    position: absolute;
+    font-size: 20px;
+    top: 60px;
+    left: 10px;
+    background-color: deeppink;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: #ad2e70;
+}
+
+.info-button:hover {
+    background-color: #ad2e70;
+}
+
+.info-table {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: rgb(0, 0, 0);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: deeppink;
+    padding: 10px;
+    border: 2px solid deeppink;
+    border-top: none;
+    border-radius: 5px 5px 5px 5px;
+    line-height: 24px;
+}
+
+#closeButton {
+    background-color: black;
+    color: deeppink;
+    border: none;
+    border-radius: 25px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#closeButton:hover {
+    background-color: #743856;
+}
+
+
+</style>
+</head>
+<body>
+    <!--Bilgi butonu -->
+    <div id="infoContainer">
+        <button id="infoButton" class="info-button">Bilgi</button>
+        <div id="infoTable" class="info-table" style="display: none;">
+            <h2>Bilgi Tablosu</h2>
+            <p>hedef: 90 saniye içinde 400 <br>puana ulaşabilmek bu sırada<br> Oskar ve Mia'yı koruyabilmek </p><br>
+            <p>Müziğin aktif olması için <br>restart tuşuna basınız</p>
+            <h2>Tuşlar</h2>
+            <p>Ok tuşları: hareket</p>
+            <p>1 2 3: yakın dövüş</p>
+            <p>q: Köpekeğe can alır -250puan</p>
+            <p>w: Alev topu fırlatır -20puan</p>
+            <p>e: Kara delik fırlatır -20puan</p>
+            <p>d: hitboxları açar</p>
+            <p>hasar almak -30puan</p>
+            <button id="closeButton">Kapat</button>
+        </div>
+    </div>
+    <br><br><br>
+        <button id="restartButton" class="button">Restart</button>
+    
+    
+    <canvas id="canvas1" width="700"> </canvas>
+
+    <img id="player" src="karakter/adventurer_sprite_sheet_v1.1.png">
+    <img id="kopek" src="karakter/kopekson1.png">
+    <img id="layer5" src="arkaplan/arkaplanfotosu3.png">
+    <img id="enemy_climb" src="enemy/climb1.png">
+    <img id="enemy_ground" src="enemy/ground222.png">
+    <img id="enemy_ground2" src="enemy/ground11.png">
+    <img id="enemy_fly" src="enemy/ucan11.png">
+    <img id="enemy_fly2" src="enemy/ucan2.png">
+    <img id="eklentican" src="simgeler/kalp2.png">
+    <img id="can" src="simgeler/kalp2.png">
+    <img id="kopekcan" src="simgeler/kopekcan4.png">
+    <img id="saldiri" src="simgeler/atis22.png">
+    <img id="saldiri2" src="simgeler/atis11.png">
+    
+
+    <!-- Arka planda çalacak müzik -->
+    <audio id="backgroundMusic" src="sesler/arkaplanmuzikleri/arkaplanmuzik.mp3" preload="auto" loop autoplay></audio>
+    <audio id="jump" src="sesler/etkilesimsesleri/jump2.mp3" preload="auto" ></audio>
+    <audio id="hasaralma" src="sesler/etkilesimsesleri/hasaralma.mp3" preload="auto" ></audio>
+    <audio id="death" src="sesler/etkilesimsesleri/olum.mp3" preload="auto" ></audio>
+    <audio id="win" src="sesler/etkilesimsesleri/win.mp3" preload="auto" ></audio>
+    <audio id="cansatinalma" src="sesler/etkilesimsesleri/canalma.mp3" preload="auto" ></audio>
+    <audio id="fireball" src="sesler/etkilesimsesleri/fireball1.mp3" preload="auto" ></audio>
+    <audio id="blackhole" src="sesler/etkilesimsesleri/blackhole3.mp3" preload="auto" ></audio>
+    <audio id="kopekhasar" src="sesler/etkilesimsesleri/dogbark.mp3" preload="auto" ></audio>
+    <audio id="kill" src="sesler/etkilesimsesleri/canavaroldurme1.mp3" preload="auto" ></audio>
+    <audio id="sword1" src="sesler/kilicsesleri/kilic1.mp3" preload="auto" ></audio>
+    <audio id="sword2" src="sesler/kilicsesleri/kilic2.mp3" preload="auto" ></audio>
+    <audio id="sword3" src="sesler/kilicsesleri/kilic3.mp3" preload="auto" ></audio>
+
+
+    <!-- çalacak müzik ses seviyesini ayarlamak için  -->
+    <script>
+
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const desiredVolume = 0.03; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    backgroundMusic.addEventListener('loadedmetadata', function() {
+    backgroundMusic.volume = desiredVolume;
+});
+
+    //zıplama ses seviyesi
+    const jump = document.getElementById('jump');
+    const desiredVolume1 = 0.008; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    jump.addEventListener('loadedmetadata', function() {
+    jump.volume = desiredVolume1;
+    
+});
+    //hasar alma ses seviyesi
+    const hasaralma = document.getElementById('hasaralma');
+    const desiredVolume2 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    hasaralma.addEventListener('loadedmetadata', function() {
+    hasaralma.volume = desiredVolume2;
+    
+});
+    //ölüm sesi
+    const death = document.getElementById('death');
+    const desiredVolume3 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    death.addEventListener('loadedmetadata', function() {
+    death.volume = desiredVolume3;
+    
+});
+    // oyunu kazanma sesi
+    const win = document.getElementById('win');
+    const desiredVolume4 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    win.addEventListener('loadedmetadata', function() {
+    win.volume = desiredVolume4;
+    
+});
+    //canları topladığımızda aldığımız ses
+    const canalma = document.getElementById('cansatinalma');
+    const desiredVolume5 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    canalma.addEventListener('loadedmetadata', function() {
+    canalma.volume = desiredVolume5;
+    
+});
+    //alev topu sesi
+    const fire = document.getElementById('fireball');
+    const desiredVolume6 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    fire.addEventListener('loadedmetadata', function() {
+    fire.volume = desiredVolume6;
+    
+});
+    //kara delik sesi
+    const blackhole = document.getElementById('blackhole');
+    const desiredVolume7 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    blackhole.addEventListener('loadedmetadata', function() {
+    blackhole.volume = desiredVolume7;
+    
+});
+    //köpeğimizin hasar alma sesi
+    const dogbark = document.getElementById('kopekhasar');
+    const desiredVolume8 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    dogbark.addEventListener('loadedmetadata', function() {
+    dogbark.volume = desiredVolume8;
+    
+});
+    //canavar öldürme sesi
+    const kill = document.getElementById('kill');
+    const desiredVolume9 = 0.05; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    kill.addEventListener('loadedmetadata', function() {
+    kill.volume = desiredVolume9;
+    
+});
+    //kılıç sesleri
+    const attack1 = document.getElementById('sword1');
+    const desiredVolume10 = 0.03; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    attack1.addEventListener('loadedmetadata', function() {
+    attack1.volume = desiredVolume10;
+    
+});
+    const attack2 = document.getElementById('sword2');
+    const desiredVolume11 = 0.03; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    attack2.addEventListener('loadedmetadata', function() {
+    attack2.volume = desiredVolume11;
+    
+});
+
+    const attack3 = document.getElementById('sword3');
+    const desiredVolume12 = 0.03; // Ayarlanacak ses seviyesi (0 ile 1 arasında olmalı)
+    // Ses seviyesini ayarlamak için biraz zaman bekleyelim
+    attack3.addEventListener('loadedmetadata', function() {
+    attack3.volume = desiredVolume12;
+    
+});
+
+    const infoButton = document.getElementById("infoButton");
+    const infoTable = document.getElementById("infoTable");
+    const closeButton = document.getElementById("closeButton");
+    const restartButton3 = document.getElementById("restartButton");
+
+    infoButton.addEventListener("click", function() {
+        infoTable.style.display = "block"; // Bilgi tablosunu göster
+        restartButton3.style.display = "none";
+    });
+
+    closeButton.addEventListener("click", function() {
+        infoTable.style.display = "none"; // Bilgi tablosunu gizle
+        restartButton3.style.display = "block";
+    });
+
+    restartButton3.onclick = function() {
+            location.reload(); // Sayfayı yeniden yükle
+    };
+
+
+
+    </script>
+    <script type="module" src="main.js">  </script>
+
+
+
+</body>
+</html>
